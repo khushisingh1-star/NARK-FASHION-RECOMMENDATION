@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N.A.R.K.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cledamine&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #ADD8E6, #FFB6C1, #FFFFE0);
+        }
+        
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100vw;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        /* Welcome Page Styles */
+        #welcome-page {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: 
+                linear-gradient(135deg, rgba(173, 216, 230, 0.8), rgba(255, 182, 193, 0.8), rgba(255, 255, 224, 0.8)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23ffffff" fill-opacity="0.05" width="50" height="50" x="0" y="0"/><rect fill="%23ffffff" fill-opacity="0.05" width="50" height="50" x="50" y="50"/></svg>');
+            background-size: 20px 20px;
+        }
+        
+        #welcome-page h1 {
+            font-size: 8rem;
+            font-family: 'Cledamine', sans-serif;
+            color: black;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            margin-bottom: 2rem;
+            z-index: 10;
+            animation: slideInTitle 1.5s ease-out forwards, float 3s ease-in-out infinite 1.5s;
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        
+        #welcome-page p {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 3rem;
+            z-index: 10;
+            font-weight: bold;
+            animation: fadeIn 2s ease-in 0.5s forwards;
+            opacity: 0;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+        
+        #start-button {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            z-index: 10;
+            animation: fadeIn 1s ease-in 1s forwards, pulse 2s infinite alternate 2s;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        
+        #start-button:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            transform: translateY(-2px) scale(1);
+        }
+        
+        /* Color Splash Elements */
+        .color-splash {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            z-index: 0;
+            animation: colorSplashMove 15s infinite alternate;
+        }
+        
+        /* Form Pages Styles */
+        .form-page {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: fadeInUp 0.8s ease-out forwards;
+            margin: 2rem 0;
+            transform-origin: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .form-page h2 {
+            color: #4a5568;
+            margin-bottom: 2rem;
+            font-size: 2.2rem;
+            text-align: center;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+        .form-group:nth-child(3) { animation-delay: 0.6s; }
+        .form-group:nth-child(4) { animation-delay: 0.8s; }
+        .form-group:nth-child(5) { animation-delay: 1.0s; }
+        .form-group:nth-child(6) { animation-delay: 1.2s; }
+        
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 1.1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            transform-origin: left;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+            transform: scaleX(1.02);
+        }
+        
+        .form-button {
+            background: linear-gradient(to right, #48bb78, #2d3748);
+            color: white;
+            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            margin-top: 1rem;
+            transform-origin: center;
+        }
+        
+        .form-button:hover {
+            background: linear-gradient(to right, #2d3748, #48bb78);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        
+        /* Recommendation Page Styles */
+        #recommendation-page {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeInUp 0.8s ease-out forwards;
+            position: relative;
+        }
+        
+        .output-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .output-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .output-container h3 {
+            font-size: 1.5rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .color-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border: 1px solid #ccc;
+            vertical-align: middle;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .color-box:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        /* Thank You Page Styles */
+        #thank-you-page {
+            text-align: center;
+            animation: fadeIn 1s ease-out forwards;
+            position: relative;
+        }
+        
+        #thank-you-page h2 {
+            font-size: 3rem;
+            color: #48bb78;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            animation: bounce 2s infinite;
+        }
+        
+        #thank-you-page p {
+            font-size: 1.5rem;
+            color: #718096;
+            margin-bottom: 2rem;
+            animation: fadeIn 2s ease-in-out infinite alternate;
+        }
+        
+        /* Animations */
+        @keyframes slideInTitle {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes colorChange {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        @keyframes smoothSlideIn {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 5px rgba(66, 153, 225, 0.5);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(66, 153, 225, 0.8);
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes cardFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+        
+        @keyframes colorSplashMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(50px, 30px);
+            }
+            50% {
+                transform: translate(-30px, 50px);
+            }
+            75% {
+                transform: translate(40px, -20px);
+            }
+            100% {
+                transform: translate(-20px, 40px);
+            }
+        }
+        
+        /* Floating shapes */
+        .shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .circle {
+            border-radius: 50%;
+        }
+        
+        .rectangle {
+            border-radius: 10px;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+        
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #welcome-page h1 {
+                font-size: 4rem;
+            }
+            
+            #welcome-page p {
+                font-size: 1.3rem;
+            }
+            
+            .form-page {
+                padding: 2rem 1.5rem;
+            }
+            
+            .output-container {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #welcome-page h1 {
+                font-size: 3rem;
+            }
+            
+            .form-page {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Page -->
+    <div id="welcome-page" class="main-container">
+        <h1>N.A.R.K.</h1>
+        <p>Neutral. Artsy. Relaxed. Kicks.</p>
+        <button id="start-button">Get Started</button>
+        
+        <!-- Floating shapes -->
+        <div class="shape circle" style="width: 100px; height: 100px; background-color: rgba(255, 192, 203, 0.4); top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="shape rectangle" style="width: 80px; height: 80px; background-color: rgba(173, 216, 230, 0.4); top: 70%; left: 80%; animation-delay: 0.5s;"></div>
+        <div class="shape circle" style="width: 120px; height: 120px; background-color: rgba(255, 255, 224, 0.4); top: 40%; left: 75%; animation-delay: 1s;"></div>
+        <div class="shape rectangle" style="width: 60px; height: 60px; background-color: rgba(255, 182, 193, 0.4); top: 60%; left: 15%; animation-delay: 1.5s;"></div>
+        <div class="shape circle" style="width: 90px; height: 90px; background-color: rgba(173, 216, 230, 0.4); top: 25%; left: 60%; animation-delay: 2s;"></div>
+    </div>
+
+    <!-- User Info Page -->
+    <div id="user-info-page" class="main-container hidden">
+        <!-- Color Splash Elements -->
+        <div class="color-splash" style="background-color: #FFB6C1; top: 10%; left: 10%; width: 400px; height: 400px; animation-delay: 0s;"></div>
+        <div class="color-splash" style="background-color: #ADD8E6; bottom: 10%; right: 10%; width: 350px; height: 350px; animation-delay: 2s;"></div>
+        <div class="color-splash" style="background-color: #FFFFE0; top: 30%; right: 20%; width: 300px; height: 300px; animation-delay: 4s;"></div>
+        
+        <div class="form-page">
+            <h2>User Information</h2>
+            <form id="user-info-form">
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Non-binary">Non-binary</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (e.g., 5'8\" or 173 cm):</label>
+                    <input type="text" id="height" name="height" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (e.g., 70 kg or 154 lbs):</label>
+                    <input type="text" id="weight" name="weight" required>
+                </div>
+                <div class="form-group">
+                    <label for="body-shape">Body Shape:</label>
+                    <select id="body-shape" name="body-shape" required>
+                        <option value="Apple">Apple</option>
+                        <option value="Hourglass">Hourglass</option>
+                        <option value="Pear">Pear</option>
+                        <option value="Rectangle">Rectangle</option>
+                        <option value="Inverted Triangle">Inverted Triangle</option>
+                        <option value="Oval">Oval</option>
+                        <option value="Athletic">Athletic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skin-tone">Skin Tone:</label>
+                    <select id="skin-tone" name="skin-tone" required>
+                        <option value="Very Light">Very Light</option>
+                        <option value="Light">Light</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Tan">Tan</option>
+                        <option value="Dark">Dark</option>
+                        <option value="Very Dark">Very Dark</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skin-undertone">Skin Undertone:</label>
+                    <select id="skin-undertone" name="skin-undertone" required>
+                        <option value="Warm">Warm</option>
+                        <option value="Cool">Cool</option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Olive">Olive</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-button">Next</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fashion Preferences Page -->
+    <div id="fashion-preferences-page" class="main-container hidden">
+        <!-- Color Splash Elements -->
+        <div class="color-splash" style="background-color: #FFD700; top: 5%; left: 5%; width: 500px; height: 500px; animation-delay: 1s;"></div>
+        <div class="color-splash" style="background-color: #9370DB; bottom: 5%; right: 5%; width: 450px; height: 450px; animation-delay: 3s;"></div>
+        <div class="color-splash" style="background-color: #FFA07A; top: 40%; right: 15%; width: 400px; height: 400px; animation-delay: 5s;"></div>
+        
+        <div class="form-page">
+            <h2>Fashion Preferences</h2>
+            <form id="fashion-preferences-form">
+                <div class="form-group">
+                    <label for="style">Preferred Fashion Style:</label>
+                    <select id="style" name="style" required>
+                        <option value="Casual">Casual</option>
+                        <option value="Formal">Formal</option>
+                        <option value="Streetwear">Streetwear</option>
+                        <option value="Chic">Chic</option>
+                        <option value="Bohemian">Bohemian</option>
+                        <option value="Vintage">Vintage</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="colors">Favorite Clothing Colors (comma-separated):</label>
+                    <input type="text" id="colors" name="colors" required placeholder="e.g., Blue, Green, Red">
+                </div>
+                <div class="form-group">
+                    <label for="shoes">Preferred Shoes (e.g., Sneakers, Heels, Boots):</label>
+                    <input type="text" id="shoes" name="shoes" required placeholder="e.g., Sneakers, Heels, Boots">
+                </div>
+                <div class="form-group">
+                    <label for="accessories">Accessories you like (comma-separated):</label>
+                    <input type="text" id="accessories" name="accessories" required placeholder="e.g., Watch, Necklace, Bracelet">
+                </div>
+                <div class="form-group">
+                    <label for="jewelry-metal">Preferred Jewelry Metal (Gold, Silver, Any):</label>
+                    <input type="text" id="jewelry-metal" name="jewelry-metal" required placeholder="e.g., Gold, Silver, Any">
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="prev-button" type="button" class="form-button" style="background: linear-gradient(to right, #718096, #4a5568);">Previous</button>
+                    <button type="submit" class="form-button">Next</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Occasion Page -->
+    <div id="occasion-page" class="main-container hidden">
+        <!-- Color Splash Elements -->
+        <div class="color-splash" style="background-color: #98FB98; top: 10%; left: 15%; width: 350px; height: 350px; animation-delay: 2s;"></div>
+        <div class="color-splash" style="background-color: #FFC0CB; bottom: 15%; right: 15%; width: 400px; height: 400px; animation-delay: 4s;"></div>
+        <div class="color-splash" style="background-color: #87CEFA; top: 60%; right: 25%; width: 300px; height: 300px; animation-delay: 6s;"></div>
+        
+        <div class="form-page">
+            <h2>Occasion</h2>
+            <form id="occasion-form">
+                <div class="form-group">
+                    <label for="occasion">What occasion is this outfit for?</label>
+                    <input type="text" id="occasion" name="occasion" required placeholder="e.g., Casual, Formal, Party">
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <button id="prev-button-occasion" type="button" class="form-button" style="background: linear-gradient(to right, #718096, #4a5568);">Previous</button>
+                    <button type="submit" class="form-button">Get Recommendation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recommendation Page -->
+    <div id="recommendation-page" class="main-container hidden">
+        <!-- Color Splash Elements -->
+        <div class="color-splash" style="background-color: #FFA500; top: 5%; left: 10%; width: 450px; height: 450px; animation-delay: 1s;"></div>
+        <div class="color-splash" style="background-color: #DA70D6; bottom: 10%; right: 10%; width: 500px; height: 500px; animation-delay: 3s;"></div>
+        <div class="color-splash" style="background-color: #20B2AA; top: 50%; right: 20%; width: 400px; height: 400px; animation-delay: 5s;"></div>
+        
+        <div style="width: 100%; max-width: 900px;">
+            <h2 style="font-size: 2.2rem; color: #4a5568; margin-bottom: 2rem; text-align: center; animation: textGlow 3s ease-in-out infinite alternate;">Outfit Recommendation</h2>
+            
+            <div id="recommendation-output" class="output-container">
+                <!-- Recommendation will be inserted here -->
+            </div>
+            
+            <div id="search-suggestions" class="output-container">
+                <h3>Image Search Suggestions</h3>
+                <p id="search-suggestions-text"></p>
+                <p style="margin-top: 1rem;">Try searching online for these items to see examples.</p>
+            </div>
+            
+            <div id="gemini-prompt-output" class="output-container">
+                <h3>Gemini Prompt</h3>
+                <p id="gemini-prompt-text" style="white-space: pre-wrap; word-break: break-word;"></p>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #718096;">
+                    For visual representation, you can also visit <a href="https://gemini.google.com" target="_blank" style="color: #4299e1; text-decoration: none;">Google Gemini</a> and paste the prompt.
+                </p>
+            </div>
+            
+            <button id="thank-you-button" class="form-button" style="display: block; margin: 2rem auto 0; background: linear-gradient(to right, #38a169, #2f855a);">
+                Show Thank You
+            </button>
+        </div>
+    </div>
+
+    <!-- Thank You Page -->
+    <div id="thank-you-page" class="main-container hidden">
+        <!-- Color Splash Elements -->
+        <div class="color-splash" style="background-color: #90EE90; top: 10%; left: 15%; width: 500px; height: 500px; animation-delay: 0s;"></div>
+        <div class="color-splash" style="background-color: #FFB6C1; bottom: 15%; right: 15%; width: 450px; height: 450px; animation-delay: 2s;"></div>
+        <div class="color-splash" style="background-color: #87CEEB; top: 60%; right: 25%; width: 400px; height: 400px; animation-delay: 4s;"></div>
+        
+        <div style="background-color: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; z-index: 1;">
+            <h2>Thank You!</h2>
+            <p>We hope you like your outfit recommendation.</p>
+            <button id="restart-button" class="form-button" style="margin-top: 2rem;">Restart</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const welcomePage = document.getElementById('welcome-page');
+        const userInfoPage = document.getElementById('user-info-page');
+        const fashionPreferencesPage = document.getElementById('fashion-preferences-page');
+        const occasionPage = document.getElementById('occasion-page');
+        const recommendationPage = document.getElementById('recommendation-page');
+        const thankYouPage = document.getElementById('thank-you-page');
+        
+        const startButton = document.getElementById('start-button');
+        const userInfoForm = document.getElementById('user-info-form');
+        const fashionPreferencesForm = document.getElementById('fashion-preferences-form');
+        const occasionForm = document.getElementById('occasion-form');
+        const prevButton = document.getElementById('prev-button');
+        const prevButtonOccasion = document.getElementById('prev-button-occasion');
+        const recommendationOutput = document.getElementById('recommendation-output');
+        const geminiPromptText = document.getElementById('gemini-prompt-text');
+        const thankYouButton = document.getElementById('thank-you-button');
+        const restartButton = document.getElementById('restart-button');
+        const searchSuggestionsText = document.getElementById('search-suggestions-text');
+
+        // Event listeners
+        startButton.addEventListener('click', () => {
+            welcomePage.classList.add('hidden');
+            userInfoPage.classList.remove('hidden');
+            createConfetti();
+        });
+
+        userInfoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            userInfoPage.classList.add('hidden');
+            fashionPreferencesPage.classList.remove('hidden');
+        });
+
+        prevButton.addEventListener('click', () => {
+            fashionPreferencesPage.classList.add('hidden');
+            userInfoPage.classList.remove('hidden');
+        });
+
+        fashionPreferencesForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            fashionPreferencesPage.classList.add('hidden');
+            occasionPage.classList.remove('hidden');
+        });
+
+        prevButtonOccasion.addEventListener('click', () => {
+            occasionPage.classList.add('hidden');
+            fashionPreferencesPage.classList.remove('hidden');
+        });
+
+        occasionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Collect all form data
+            const userData = {
+                gender: document.getElementById('gender').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                "body-shape": document.getElementById('body-shape').value,
+                "skin-tone": document.getElementById('skin-tone').value,
+                "skin-undertone": document.getElementById('skin-undertone').value,
+                style: document.getElementById('style').value,
+                colors: document.getElementById('colors').value,
+                shoes: document.getElementById('shoes').value,
+                accessories: document.getElementById('accessories').value,
+                "jewelry-metal": document.getElementById('jewelry-metal').value,
+                occasion: document.getElementById('occasion').value
+            };
+
+            try {
+                // Send data to Flask backend
+                const response = await fetch('/get_recommendation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                // Display the recommendation
+                displayDetailedRecommendation(data.recommendation);
+                
+                // Display Gemini prompt
+                geminiPromptText.textContent = data.gemini_prompt;
+                
+                // Display search suggestions
+                searchSuggestionsText.textContent = `Try searching for: ${data.search_query}`;
+                
+                // Show recommendation page
+                occasionPage.classList.add('hidden');
+                recommendationPage.classList.remove('hidden');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while getting the recommendation. Please try again.');
+            }
+        });
+
+        thankYouButton.addEventListener('click', () => {
+            recommendationPage.classList.add('hidden');
+            thankYouPage.classList.remove('hidden');
+            createConfetti();
+        });
+
+        restartButton.addEventListener('click', () => {
+            thankYouPage.classList.add('hidden');
+            welcomePage.classList.remove('hidden');
+            document.getElementById('user-info-form').reset();
+            document.getElementById('fashion-preferences-form').reset();
+            document.getElementById('occasion-form').reset();
+            recommendationOutput.innerHTML = '';
+        });
+
+        // Helper functions
+        function displayDetailedRecommendation(recommendation) {
+            let outputHTML = `
+                <h3>Your Custom Outfit</h3>
+                <div style="margin-top: 1.5rem;">
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Outfit Style:</h4>
+                    <p style="margin-bottom: 1rem;">${recommendation["Outfit Style"]}</p>
+                    
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Outfit Colors:</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                        ${recommendation["Outfit Colors"].map(color => `
+                            <div style="display: flex; align-items: center; padding: 0.3rem 0.6rem; background-color: #f0f4f8; border-radius: 20px;">
+                                <div class="color-box" style="background-color: ${getColorValue(color)};"></div>
+                                <span>${color}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Shoes:</h4>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <div class="color-box" style="background-color: ${getColorValue(recommendation["Shoe Color"])};"></div>
+                        <span>${recommendation["Shoe Style"]} in ${recommendation["Shoe Color"]}</span>
+                    </div>
+                    
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Accessories:</h4>
+                    <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                        ${recommendation["Accessories"].map(acc => `
+                            <li>${acc}</li>
+                        `).join('')}
+                    </ul>
+                    
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Occasion:</h4>
+                    <p>${recommendation["Occasion"]}</p>
+                </div>
+            `;
+            recommendationOutput.innerHTML = outputHTML;
+        }
+
+        function getColorValue(colorName) {
+            const colorMap = {
+                "Black": "#000000",
+                "White": "#FFFFFF",
+                "Blue": "#0000FF",
+                "Gray": "#808080",
+                "OliveGreen": "#6B8E23",
+                "SkyBlue": "#87CEEB",
+                "DenimBlue": "#1560BD",
+                "Khaki": "#C3B091",
+                "Navy": "#000080",
+                "LightBlue": "#ADD8E6",
+                "Burgundy": "#800020",
+                "Teal": "#008080",
+                "Beige": "#F5F5DC",
+                "Rust": "#B7410E",
+                "Maroon": "#800000",
+                "Charcoal": "#36454F",
+                "ForestGreen": "#228B22",
+                "SlateGray": "#708090",
+                "Red": "#FF0000",
+                "Green": "#008000",
+                "Brown": "#A52A2A",
+                "Mustard": "#FFDB58",
+                "Cream": "#FFFDD0",
+                "Olive": "#808000",
+                "SeaGreen": "#2E8B57",
+                "RoyalBlue": "#4169E1",
+                "Gold": "#FFD700",
+                "Silver": "#C0C0C0",
+                "Emerald": "#50C878",
+                "Amethyst": "#9966CC",
+                "Rose": "#FF007F",
+                "Sapphire": "#0F52BA",
+                "Magenta": "#FF00FF",
+                "Peach": "#FFE5B4",
+                "Camo": "#78866B",
+                "NeonGreen": "#39FF14",
+                "Orange": "#FFA500",
+                "Purple": "#800080",
+                "Cyan": "#00FFFF",
+                "Yellow": "#FFFF00",
+                "Pink": "#FFC0CB",
+                "PowderBlue": "#B0E0E6",
+                "Mint": "#3EB489",
+                "SaddleBrown": "#8B4513",
+                "Mauve": "#E0B0FF",
+                "Terracotta": "#E2725B",
+                "Turquoise": "#40E0D0",
+                "Plum": "#8E4585",
+                "Ivory": "#FFFFF0",
+                "LightPink": "#FFB6C1",
+                "MidnightBlue": "#191970",
+                "Coral": "#FF7F50",
+                "Lavender": "#E6E6FA",
+                "Salmon": "#FA8072",
+                "Tan": "#D2B48C",
+                "Dark": "#1A1A1A",
+                "Very Dark": "#0A0A0A",
+                "Very Light": "#F5F5F5",
+                "Light": "#E6E6E6",
+                "Medium": "#A8A8A8",
+                "Floral Prints": "#FF69B4",
+                "Earth Tones": "#A0522D"
+            };
+            return colorMap[colorName] || "#CCCCCC";
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                // Animation
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1 },
+                    { top: '100vh', opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+            
+            // Add CSS for animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
+</body>
+</html>
